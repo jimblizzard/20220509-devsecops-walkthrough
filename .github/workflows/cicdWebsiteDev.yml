@@ -46,6 +46,9 @@ jobs:
       run: | 
         pwd 
         ls -la 
+        cd ${{ env.path-to-application }}
+        pwd
+        ls -la 
         dotnet restore
         dotnet build --no-restore --configuration ${{ env.configuration }} 
         dotnet test --no-build --no-restore
