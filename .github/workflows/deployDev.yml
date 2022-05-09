@@ -27,8 +27,8 @@ jobs:
         uses: azure/arm-deploy@v1 
         with: 
           resourceGroupName: 22020509-devsecops-blizz-rg
-          template: ./Resources/ARM-Templates/template.json
-          parameters: Resources/ARM-Templates/parameters.json   
+          template: ./Student/Resources/ARM-Templates/template.json
+          parameters: Student/Resources/ARM-Templates/parameters.json   
           
       - name: az logout
         run: |
