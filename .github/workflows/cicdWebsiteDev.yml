@@ -76,7 +76,7 @@ jobs:
     - name: upload build artifacts 
       uses: actions/upload-artifact@v3 
       with:
-        name: build artifacts
+        name: build-artifacts
         path: ${{env.path-to-application}}/myapp
       
   # deploy job
