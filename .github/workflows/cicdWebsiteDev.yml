@@ -4,8 +4,8 @@ name: cicdWebsiteDev.yml
 
 env: 
   path-to-application: Student/Resources/Application/src/RazorPagesSample/
-  resource-group: '20220502webapps-rg'
-  appservice-name: '20220502webapps-web'
+  resource-group: '22020509-devsecops-blizz-rg'
+  appservice-name: '22020509-devsecops-blizz-dev-web'
   appservice-package-path: '.' 
 
 on: 
