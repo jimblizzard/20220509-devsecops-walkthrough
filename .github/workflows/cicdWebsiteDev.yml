@@ -7,6 +7,8 @@ env:
   resource-group: '22020509-devsecops-blizz-rg'
   appservice-name: '22020509-devsecops-blizz-dev-web'
   appservice-package-path: '.' 
+  configuration: Release
+  dotnet_version: '3.1.x'
 
 on: 
   push: 
@@ -28,32 +30,34 @@ jobs:
   build: 
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ${{ env.path-to-application }}
+#    defaults:
+#      run:
+#        working-directory: ${{ env.path-to-application }}
 
     steps:
     - uses: actions/checkout@v3
 
-    - name: setup .NET
+    - name: setup .NET Core
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: 3.1
-      
-    - name: restore dependencies 
-      run: dotnet restore
-    
-    - name: build 
-      run: dotnet build --no-restore
+        dotnet-version: ${{ env.dotnet_version }}
 
-    - name: test
-      run: dotnet test --no-build --no-restore
+    - name: dotnet build and publish 
+      run: | 
+        pwd 
+        ls -la 
+        dotnet restore
+        dotnet build --no-restore --configuration ${{ env.configuration }} 
+        dotnet test --no-build --no-restore
+        dotnet publish -c Release -o '${{env.appservice-package-path}}/myapp'
+        pwd
+        ls -la 
 
     - name: upload build artifacts 
       uses: actions/upload-artifact@v2 
       with:
         name: build
-        path: ${{env.path-to-application}}
+        path: ${{env.appservice-package-path}}/myapp
       
   # deploy job
   deploy: 
@@ -83,3 +87,7 @@ jobs:
         app-name: ${{env.appservice-name}}
         package: ${{env.appservice-package-path}}
         # publish-profile: ${{secrets.BLIZZWEBAPPSERVERFARM_WEB_PUBLISHSETTINGS}}
+
+    - name: logout 
+      run: | 
+       az logout 
