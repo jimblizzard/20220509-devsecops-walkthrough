@@ -1,0 +1,85 @@
+# File: cicdWebsiteDev.yml
+
+name: cicdWebsiteDev.yml
+
+env: 
+  path-to-application: Student/Resources/Application/src/RazorPagesSample/
+  resource-group: '20220502webapps-rg'
+  appservice-name: '20220502webapps-web'
+  appservice-package-path: '.' 
+
+on: 
+  push: 
+    paths:
+      - 'Resources/Application/**'
+      - '.github/workflows/cicdWebsiteDev.yml'
+    branches: [none]
+
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'log level'
+        required: true
+        default: 'warning'
+  
+jobs: 
+
+  # build job
+  build: 
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ${{ env.path-to-application }}
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 3.1
+      
+    - name: restore dependencies 
+      run: dotnet restore
+    
+    - name: build 
+      run: dotnet build --no-restore
+
+    - name: test
+      run: dotnet test --no-build --no-restore
+
+    - name: upload build artifacts 
+      uses: actions/upload-artifact@v2 
+      with:
+        name: build
+        path: ${{env.path-to-application}}
+      
+  # deploy job
+  deploy: 
+    needs: build 
+    runs-on: ubuntu-latest
+  
+    steps:
+
+    - name: download build artifacts
+      uses: actions/download-artifact@v2
+      with: 
+        name: build  
+
+    - name: debugging
+      run: | 
+        pwd
+        ls -la 
+
+    - name: login via gh action 
+      uses: azure/login@v1 
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+
+    - name: deploy to azure app service
+      uses: azure/webapps-deploy@v2 
+      with: 
+        app-name: ${{env.appservice-name}}
+        package: ${{env.appservice-package-path}}
+        # publish-profile: ${{secrets.BLIZZWEBAPPSERVERFARM_WEB_PUBLISHSETTINGS}}
