@@ -74,9 +74,9 @@ jobs:
         ls -la 
 
     - name: upload build artifacts 
-      uses: actions/upload-artifact@v2 
+      uses: actions/upload-artifact@v3 
       with:
-        name: build
+        name: build artifacts
         path: ${{env.appservice-package-path}}/myapp
       
   # deploy job
