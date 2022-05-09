@@ -42,18 +42,35 @@ jobs:
       with:
         dotnet-version: ${{ env.dotnet_version }}
 
-    - name: dotnet build and publish 
+    - name: debug 1 
       run: | 
+        echo 'where are we'
         pwd 
         ls -la 
+
+    - name: move to app path 
+      run: |
         cd ${{ env.path-to-application }}
         pwd
         ls -la 
-        dotnet restore
-        dotnet build --no-restore --configuration ${{ env.configuration }} 
-        dotnet test --no-build --no-restore
-        dotnet publish -c Release -o '${{env.appservice-package-path}}/myapp'
-        pwd
+
+    - name: dotnet restore 
+      run: dotnet restore
+    
+    - name: dotnet build 
+      run: dotnet build --no-restore --configuration ${{ env.configuration }} 
+
+    - name: dotnet test 
+      run: dotnet test --no-build --no-restore
+
+    - name: dotnet publish   
+      run: dotnet publish -c Release -o '${{env.appservice-package-path}}/myapp'
+
+    - name: debug 2 
+      run: | 
+        echo 'where are we'
+        cd '${{env.appservice-package-path}}/myapp'
+        pwd 
         ls -la 
 
     - name: upload build artifacts 
