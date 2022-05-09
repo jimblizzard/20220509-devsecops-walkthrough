@@ -30,9 +30,9 @@ jobs:
   build: 
     runs-on: ubuntu-latest
 
-#    defaults:
-#      run:
-#        working-directory: ${{ env.path-to-application }}
+    defaults:
+      run:
+        working-directory: ${{ env.path-to-application }}
 
     steps:
     - uses: actions/checkout@v3
@@ -48,11 +48,11 @@ jobs:
         pwd 
         ls -la 
 
-    - name: move to app path 
-      run: |
-        cd ${{ env.path-to-application }}
-        pwd
-        ls -la 
+#    - name: move to app path 
+#      run: |
+#        cd ${{ env.path-to-application }}
+#        pwd
+#        ls -la 
 
     - name: dotnet restore 
       run: dotnet restore
