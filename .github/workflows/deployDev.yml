@@ -1,0 +1,37 @@
+name: deployDev.yml
+
+on: 
+  push:
+    paths: 
+      - '**/deployDev.yml'
+    branches: [none]
+  
+  workflow_dispatch:
+ 
+jobs: 
+  deploy-infrastructure:
+    runs-on: ubuntu-latest
+    steps: 
+        # Checkout code
+      - uses: actions/checkout@v3
+
+
+      - name: login via gh action 
+        uses: azure/login@v1 
+        with:
+          creds: ${{secrets.AZURE_CREDENTIALS}}
+
+        # see: https://github.com/marketplace/actions/deploy-azure-resource-manager-arm-template?msclkid=e9244600c34511ec96f74cc8ad831ed9#example
+        # Deploy ARM template
+      - name: Deploy ARM template 
+        uses: azure/arm-deploy@v1 
+        with: 
+          resourceGroupName: 22020509-devsecops-blizz-rg
+          template: ./Resources/ARM-Templates/template.json
+          parameters: Resources/ARM-Templates/parameters.json   
+          
+      - name: az logout
+        run: |
+
+          az logout 
+                

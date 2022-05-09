@@ -3,19 +3,19 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "subscriptionId": {
-            "value": "<yourSubscriptionId>"
+            "value": "1aeb3605-3fce-4387-8597-edaca21a19b2"
         },
         "rgName": {
-            "value": "<prefix>webapps-rg"
+            "value": "22020509-devsecops-blizz-rg"
         },
         "webAppName": {
-            "value": "<prefix>webapps-web"
+            "value": "22020509-devsecops-blizz-dev-web"
         },
         "location": {
             "value": "eastus"
         },
         "serverFarmName": {
-            "value": "<prefix>webapps-asp"
+            "value": "22020509-devsecops-blizz-dev-asp"
         },
         "alwaysOn": {
             "value": true
