@@ -99,7 +99,7 @@ jobs:
     - name: login via gh action 
       uses: azure/login@v1 
       with:
-        creds: ${{secrets.AZURE_CREDENTIALS}}
+        creds: ${{secrets.AZURE_CREDENTIALS_20220510}}
 
     - name: deploy to azure app service
       uses: azure/webapps-deploy@v2 
