@@ -19,7 +19,7 @@ jobs:
       - name: login via gh action 
         uses: azure/login@v1 
         with:
-          creds: ${{secrets.AZURE_CREDENTIALS_BLIZZ}}
+          creds: ${{secrets.AZURE_CREDENTIALS_20220510}}
 
         # see: https://github.com/marketplace/actions/deploy-azure-resource-manager-arm-template?msclkid=e9244600c34511ec96f74cc8ad831ed9#example
         # Deploy ARM template
