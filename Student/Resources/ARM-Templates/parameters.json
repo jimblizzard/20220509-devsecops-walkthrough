@@ -6,16 +6,16 @@
             "value": "1aeb3605-3fce-4387-8597-edaca21a19b2"
         },
         "rgName": {
-            "value": "22020509-devsecops-blizz-rg"
+            "value": "20220510-devsecops-rg"
         },
         "webAppName": {
-            "value": "22020509-devsecops-blizz-dev-web"
+            "value": "20220510-devsecops-dev-web"
         },
         "location": {
             "value": "eastus"
         },
         "serverFarmName": {
-            "value": "22020509-devsecops-blizz-dev-asp"
+            "value": "20220510-devsecops-dev-asp"
         },
         "alwaysOn": {
             "value": true
