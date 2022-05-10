@@ -1,0 +1,112 @@
+# File: cicdWebsiteDev.yml
+
+name: cicdWebsiteDev.yml
+
+env: 
+  path-to-application: Student/Resources/Application/src/RazorPagesSample/
+  resource-group: '20220510-devsecops-rg'
+  appservice-name: '20220510-devsecops-dev-web'
+  appservice-package-path: '.' 
+  configuration: Release
+  dotnet_version: '3.1.x'
+
+on: 
+  push: 
+    paths:
+      - 'Resources/Application/**'
+      - '.github/workflows/cicdWebsiteDev20220510.yml'
+    branches: [blizzard01]
+
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'log level'
+        required: true
+        default: 'warning'
+  
+jobs: 
+
+  # build job
+  build: 
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ${{ env.path-to-application }}
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: setup .NET Core
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: ${{ env.dotnet_version }}
+
+    - name: debug 1 
+      run: | 
+        echo 'where are we?'
+        pwd 
+        ls -la 
+
+#    - name: move to app path 
+#      run: |
+#        cd ${{ env.path-to-application }}
+#        pwd
+#        ls -la 
+
+    - name: dotnet restore 
+      run: dotnet restore
+    
+    - name: dotnet build 
+      run: dotnet build --no-restore --configuration ${{ env.configuration }} 
+
+    - name: dotnet test 
+      run: dotnet test --no-build --no-restore
+
+    - name: dotnet publish   
+      run: dotnet publish -c Release -o '${{env.appservice-package-path}}/myapp'
+
+    - name: debug 2 
+      run: | 
+        echo 'where are we'
+        cd '${{env.appservice-package-path}}/myapp'
+        pwd 
+        ls -la 
+
+    - name: upload build artifacts 
+      uses: actions/upload-artifact@v3 
+      with:
+        name: build-artifacts
+        path: ${{env.path-to-application}}/myapp
+      
+  # deploy job
+  deploy: 
+    needs: build 
+    runs-on: ubuntu-latest
+  
+    steps:
+
+    - name: download build artifacts
+      uses: actions/download-artifact@v2
+      with: 
+        name: build-artifacts  
+
+    - name: debugging
+      run: | 
+        pwd
+        ls -la 
+
+    - name: login via gh action 
+      uses: azure/login@v1 
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+
+    - name: deploy to azure app service
+      uses: azure/webapps-deploy@v2 
+      with: 
+        app-name: ${{env.appservice-name}}
+        package: ${{env.appservice-package-path}}
+
+    - name: logout 
+      run: | 
+       az logout 
