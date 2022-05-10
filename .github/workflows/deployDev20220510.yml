@@ -4,7 +4,7 @@ on:
   push:
     paths: 
       - '**/deployDev20220510.yml'
-    branches: [none]
+    branches: [blizzard01]
   
   workflow_dispatch:
  
