@@ -1,6 +1,6 @@
 # File: cicdWebsiteDev.yml
 
-name: cicdWebsiteDev.yml
+name: cicdWebsiteDev20220510.yml
 
 env: 
   path-to-application: Student/Resources/Application/src/RazorPagesSample/
